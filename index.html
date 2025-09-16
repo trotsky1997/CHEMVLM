@@ -1,0 +1,352 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter, CardTitle, CardDescription } from "@/components/ui/card";
+import { Github, FlaskConical, Image as ImageIcon, BarChart3, BookText, Sparkles, ChevronRight, Link as LinkIcon, Copy, Check } from "lucide-react";
+
+export default function ProjectSite() {
+  const features = [
+    {
+      icon: <FlaskConical className="h-6 w-6" aria-hidden />,
+      title: "Multimodal Chemistry Understanding",
+      desc: "Integrates molecular images and text for structures, reactions, and problem solving.",
+    },
+    {
+      icon: <ImageIcon className="h-6 w-6" aria-hidden />,
+      title: "OCR → SMILES",
+      desc: "Robustly converts molecule images into machine-readable SMILES/IUPAC.",
+    },
+    {
+      icon: <Sparkles className="h-6 w-6" aria-hidden />,
+      title: "Exam-level Reasoning",
+      desc: "Covers secondary & higher-ed chemistry questions with multi-step reasoning and experiment design.",
+    },
+  ];
+
+  const stats = [
+    { label: "MMChemBench Molecule Description", value: "98.2%" },
+    { label: "MMChemBench Property Prediction", value: "80.9%" },
+    { label: "CMMU Chemistry Accuracy", value: "31.6%" },
+  ];
+
+  const datasets = [
+    { name: "ChemOCR", brief: "1,000 image→SMILES eval pairs to test OCR capability", tag: "OCR" },
+    { name: "MMCR-Bench", brief: "1,000 multimodal chemistry questions incl. MCQ/fill-in/short-answer", tag: "Reasoning" },
+    { name: "MMChemBench", brief: "A multimodal benchmark for molecule description and property prediction", tag: "Molecule" },
+  ];
+
+  // --- Citation (BibTeX) ---
+  const [copied, setCopied] = useState(false);
+  const bibtex = `@inproceedings{li2025chemvlm,
+  title={Chemvlm: Exploring the power of multimodal large language models in chemistry area},
+  author={Li, Junxian and Zhang, Di and Wang, Xunzhi and Hao, Zeying and Lei, Jingdi and Tan, Qian and Zhou, Cai and Liu, Wei and Yang, Yaotian and Xiong, Xinrui and others},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={39},
+  number={1},
+  pages={415--423},
+  year={2025}
+}`;
+  const bibtexDataUrl = `data:text/plain;charset=utf-8,${encodeURIComponent(bibtex)}`;
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(bibtex);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1200);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const nav = [
+    { href: "#about", label: "About" },
+    { href: "#features", label: "Features" },
+    { href: "#benchmarks", label: "Benchmarks" },
+    { href: "#daDatasetsets", label: "Datasets" },
+    { href: "#resources", label: "Resources" },
+    { href: "#citation", label: "Citation" },
+    { href: "#contact", label: "Contact" },
+  ];
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
+      {/* Header */}
+      <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 bg-white/50 border-b border-slate-200">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <a href="#home" className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-2xl bg-slate-900 text-white grid place-items-center shadow-md">CV</div>
+            <span className="font-semibold tracking-tight">ChemVLM</span>
+          </a>
+          <nav className="hidden md:flex items-center gap-6 text-sm">
+            {nav.map((n) => (
+              <a key={n.href} href={n.href} className="hover:text-slate-600 transition-colors">
+                {n.label}
+              </a>
+            ))}
+            <a
+              href="https://github.com/AI4Chem/ChemVlm"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm hover:bg-slate-100"
+            >
+              <Github className="h-4 w-4" /> GitHub
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      {/* Hero */}
+      <section id="home" className="relative overflow-hidden">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+          <div className="grid lg:grid-cols-12 gap-10 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="lg:col-span-7"
+            >
+              <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
+                ChemVLM: A Multimodal LLM for Chemistry
+              </h1>
+              <p className="mt-4 text-slate-600 max-w-2xl">
+                Unified understanding and reasoning over chemistry images and text, covering OCR→SMILES for molecules, reaction diagram parsing, and exam-level multi-step reasoning.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center gap-3">
+                <Button asChild className="rounded-2xl px-5 py-5">
+                  <a href="https://github.com/AI4Chem/ChemVlm" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                    <Github className="h-5 w-5" /> View on GitHub
+                  </a>
+                </Button>
+                <Button asChild variant="secondary" className="rounded-2xl px-5 py-5">
+                  <a href="#resources" className="inline-flex items-center gap-2">
+                    <BookText className="h-5 w-5" /> SePaper & Resourceser & resources <ChevronRight className="h-5 w-5" />
+                  </a>
+                </Button>
+              </div>
+              <div className="mt-8 grid grid-cols-3 gap-4 max-w-xl">
+                {stats.map((s) => (
+                  <Card key={s.label} className="rounded-2xl">
+                    <CardContent className="p-4">
+                      <div className="text-2xl font-bold">{s.value}</div>
+                      <div className="text-xs text-slate-500 mt-1">{s.label}</div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="lg:col-span-5"
+            >
+              <Card className="rounded-2xl shadow-xl">
+                <CardHeader>
+                  <CardTitle>Demo: Image → SMILES</CardTitle>
+                  <CardDescription>Upload a molecule image to automatically recognize and generate SMILES.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="aspect-video w-full rounded-xl border grid place-items-center">
+                    <ImageIcon className="h-10 w-10 text-slate-400" aria-hidden />
+                  </div>
+                  <div className="text-xs text-slate-500">* 这里放置交互式 Demo 或截图占位。</div>
+                </CardContent>
+                <CardFooter className="justify-end">
+                  <Button disabled className="rounded-xl">Coming soon</Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section id="about" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-12 gap-10 items-start">
+            <div className="md:col-span-7">
+              <h2 className="text-2xl md:text-3xl font-semibold">About</h2>
+              <p className="mt-4 text-slate-600 leading-relaxed">
+                ChemVLM adopts a ViT-MLP-LLM architecture, aligns visual encoders with a chemistry-specialized language model, and improves performance via two training stages (alignment + instruction tuning).
+              </p>
+            </div>
+            <div className="md:col-span-5">
+              <Card className="rounded-2xl">
+                <CardHeader>
+                  <CardTitle>Highlights</CardTitle>
+                  <CardDescription>Built for chemistry</CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-3">
+                  {features.map((f) => (
+                    <div key={f.title} className="flex gap-3">
+                      <div className="h-10 w-10 rounded-xl bg-slate-100 grid place-items-center">{f.icon}</div>
+                      <div>
+                        <div className="font-medium">{f.title}</div>
+                        <div className="text-sm text-slate-600">{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benchmarks */}
+      <section id="benchmarks" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl md:text-3xl font-semibold">Benchmarks</h2>
+          <p className="mt-3 text-slate-600">Representative results reported in the paper (sample display; replace with your latest tables/figures as needed).</p>
+
+          <div className="mt-8 grid md:grid-cols-3 gap-6">
+            {stats.map((s) => (
+              <Card key={s.label} className="rounded-2xl">
+                <CardHeader>
+                  <CardTitle className="text-lg">{s.label}</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="text-4xl font-bold tracking-tight">{s.value}</div>
+                </CardContent>
+                <CardFooter className="text-xs text-slate-500">See the paper and appendix for detailed comparisons.</CardFooter>
+              </Card>
+            ))}
+          </div>
+
+          <div className="mt-8">
+            <Card className="rounded-2xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2"><BarChart3 className="h-5 w-5" /> Key Comparisons</CardTitle>
+                <CardDescription>Compared to general-purpose MLLMs (zero-shot)</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="list-disc pl-6 text-slate-700 space-y-2 text-sm">
+                  <li>Achieves higher accuracy on multimodal chemistry reasoning tasks.</li>
+                  <li>Significantly outperforms general vision-language models on chemical OCR tasks.</li>
+                  <li>Property prediction benefits from joint vision + text representations.</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Datasets */}
+      <section id="datasets" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl md:text-3xl font-semibold">Datasets</h2>
+          <p className="mt-3 text-slate-600">Covers OCR, exam-style reasoning, and molecular understanding.</p>
+          <div className="mt-8 grid md:grid-cols-3 gap-6">
+            {datasets.map((d) => (
+              <Card key={d.name} className="rounded-2xl">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle>{d.name}</CardTitle>
+                    <span className="text-xs rounded-full bg-slate-100 px-2 py-1">{d.tag}</span>
+                  </div>
+                  <CardDescription>{d.brief}</CardDescription>
+                </CardHeader>
+                <CardFooter>
+                  <Button variant="outline" className="rounded-xl" asChild>
+                    <a href="#" aria-disabled>
+                      View details
+                    </a>
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Resources */}
+      <section id="resources" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl md:text-3xl font-semibold">Paper & Resources</h2>
+          <div className="mt-6 grid md:grid-cols-2 gap-6">
+            <Card className="rounded-2xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2"><BookText className="h-5 w-5" /> Paper (AAAI-25)</CardTitle>
+                <CardDescription>Includes methodology, data, and full experimental results.</CardDescription>
+              </CardHeader>
+              <CardFooter className="gap-3">
+                <Button asChild className="rounded-xl">
+                  <a href="#" aria-label="下载论文 PDF">
+                    Download PDF
+                  </a>
+                </Button>
+                <Button asChild variant="secondary" className="rounded-xl">
+                  <a href="https://github.com/AI4Chem/ChemVlm" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2">
+                    <Github className="h-4 w-4" /> Repository
+                  </a>
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="rounded-2xl">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2"><LinkIcon className="h-5 w-5" /> Quick Links</CardTitle>
+                <CardDescription>Centralized shortcuts for quick navigation.</CardDescription>
+              </CardHeader>
+              <CardContent className="grid sm:grid-cols-2 gap-3 text-sm">
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="https://github.com/AI4Chem/ChemVlm" target="_blank" rel="noreferrer">Repository</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="#benchmarks">Benchmarks</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="#datasets">Datasets</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="#about">About</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="#citation">Citation (BibTeX)</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="https://huggingface.co/AI4Chem/ChemVLM-8B" target="_blank" rel="noreferrer">Hugging Face · ChemVLM‑8B</a>
+                <a className="rounded-xl border p-3 hover:bg-slate-50" href="https://huggingface.co/AI4Chem/ChemVLM-26B" target="_blank" rel="noreferrer">Hugging Face · ChemVLM‑26B</a>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Citation */}
+      <section id="citation" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <Card className="rounded-2xl">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2"><BookText className="h-5 w-5" /> Citation (BibTeX)</CardTitle>
+              <CardDescription>Use the following entry in academic references.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <pre className="bg-slate-50 rounded-xl p-4 overflow-x-auto text-xs leading-relaxed">{bibtex}</pre>
+            </CardContent>
+            <CardFooter className="gap-3">
+              <Button onClick={handleCopy} className="rounded-xl inline-flex items-center gap-2">
+                {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />} {copied ? "Copied" : "Copy BibTeX"}
+              </Button>
+              <Button asChild variant="secondary" className="rounded-xl">
+                <a href={bibtexDataUrl} download="chemvlm.bib">Download .bib</a>
+              </Button>
+            </CardFooter>
+          </Card>
+        </div>
+      </section>
+
+      {/* Contact */}
+      <section id="contact" className="py-16 md:py-24 border-t">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+          <Card className="rounded-2xl">
+            <CardHeader>
+              <CardTitle>Contact</CardTitle>
+              <CardDescription>We welcome academic collaboration, industry partnerships, and data contributions.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm text-slate-600">Please email contact@example.com, or open an issue on GitHub to reach us.</p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-10 border-t">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-sm text-slate-500 flex flex-col md:flex-row items-center justify-between gap-3">
+          <p>© {new Date().getFullYear()} ChemVLM • All rights reserved.</p>
+          <p>Built with ❤️ using React & Tailwind</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
